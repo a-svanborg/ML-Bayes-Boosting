@@ -68,10 +68,16 @@ def mlParams(X, labels, W=None):
 
     # TODO: fill in the code to compute mu and sigma!
     # ==========================
-    
+    for (k,class_) in enumerate(classes):
+        idx = np.where(labels==class_)[0]
+        xlc = X[idx,:]
+        Wlc = W[idx]
+        mu[k] = np.array([np.sum(np.multiply(xlc[:,i].reshape(len(idx),1),Wlc)) for i in range(Ndims)])/np.sum(Wlc)
+        sigma[k] = np.diag([sum([Wlc[i,0]*((xlc[i,m]-mu[k][m]) ** 2) /np.sum(Wlc) for i in range(len(idx))]) for m in range(Ndims)])
     # ==========================
 
     return mu, sigma
+
 
 # in:      X - N x d matrix of M data points
 #      prior - C x 1 matrix of class priors
