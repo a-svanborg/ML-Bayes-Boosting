@@ -68,12 +68,12 @@ def mlParams(X, labels, W=None):
 
     # TODO: fill in the code to compute mu and sigma!
     # ==========================
-    for (k,class_) in enumerate(classes):
-        idx = np.where(labels==class_)[0]
-        xlc = X[idx,:]
-        Wlc = W[idx]
-        mu[k] = np.array([np.sum(np.multiply(xlc[:,i].reshape(len(idx),1),Wlc)) for i in range(Ndims)])/np.sum(Wlc)
-        sigma[k] = np.diag([sum([Wlc[i,0]*((xlc[i,m]-mu[k][m]) ** 2) /np.sum(Wlc) for i in range(len(idx))]) for m in range(Ndims)])
+    for (k, current_class) in enumerate(classes):
+        indexes_of_class = np.where(labels==current_class)[0]
+        x_of_current_class = X[indexes_of_class,:]
+        weight_of_current_class = W[indexes_of_class]
+        mu[k] = np.array([np.sum(np.multiply(x_of_current_class[:,i].reshape(len(indexes_of_class),1),weight_of_current_class)) for i in range(Ndims)])/np.sum(weight_of_current_class)
+        sigma[k] = np.diag([sum([weight_of_current_class[i,0]*((x_of_current_class[i,m]-mu[k][m]) ** 2) /np.sum(weight_of_current_class) for i in range(len(indexes_of_class))]) for m in range(Ndims)])
     # ==========================
 
     return mu, sigma
